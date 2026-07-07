@@ -190,7 +190,7 @@ export default async function repackAssetsLoader(
         }
 
         const scale = getScaleNumber(scaleKey);
-        const dimensions = getAssetDimensions({
+        const dimensions = await getAssetDimensions({
           resourceData: content,
           resourceScale: scale,
         });

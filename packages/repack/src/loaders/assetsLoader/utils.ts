@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { imageSize } from 'image-size';
+import sharp from 'sharp';
 import type { Asset, AssetDimensions, CollectedScales } from './types.js';
 
 export function getScaleNumber(scaleKey: string) {
@@ -12,15 +12,16 @@ export function getAssetSize(assets: Asset[]) {
   return assets[0].dimensions;
 }
 
-export function getAssetDimensions({
+export async function getAssetDimensions({
   resourceData,
   resourceScale,
 }: {
   resourceData: Buffer;
   resourceScale: number;
-}): AssetDimensions | null {
+}): Promise<AssetDimensions | null> {
   try {
-    const info = imageSize(resourceData);
+    const sharpInstance = sharp(resourceData);
+    const info = await sharpInstance.metadata();
     if (!info.width || !info.height) {
       return null;
     }
